@@ -1,0 +1,184 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  museepa-skill
+
+  Sample SAM Template for museepa-skill
+
+
+Globals:
+  Function:
+    Timeout: 25
+    MemorySize: 128
+  Api:
+    Cors:
+      AllowMethods: "'GET'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaExecutionPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: 'arn:aws:logs:*:*:*'
+        - PolicyName: get-secrets-db-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: 'arn:aws:secretsmanager:us-west-1:471112501035:secret:prod/musepa/vercel/postgres-REotkz'
+
+  # API Gateway
+  SkillApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: SkillApi
+      StageName: Dev
+      Cors:
+        AllowMethods: "'GET'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+
+  # ------------ Event ------------
+  CurrentEventsListIntentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: modules/alexa-skill/current_events_list_intent
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Architectures:
+        - x86_64
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref EventApi
+            Path: /get_current_events
+            Method: GET
+  EventDetailsIntentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: modules/alexa-skill/event_details_intent
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Architectures:
+        - x86_64
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref EventApi
+            Path: /get_event_details
+            Method: GET
+  EventsByDateIntentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: modules/alexa-skill/events_by_date_intent
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Architectures:
+        - x86_64
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref EventApi
+            Path: /get_events/{date}
+            Method: GET
+  MuseumDetailsIntentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: modules/alexa-skill/museum_details_intent
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Architectures:
+        - x86_64
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref EventApi
+            Path: /get_museum_details
+            Method: GET
+  WorkDetailsIntentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: modules/alexa-skill/work_details_intent
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Architectures:
+        - x86_64
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref EventApi
+            Path: /get_work_details
+            Method: GET
+  WorksListIntentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: modules/alexa-skill/works_list_intent
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Architectures:
+        - x86_64
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref EventApi
+            Path: /get_works/{limits}
+            Method: GET
+
+Outputs:
+  SkillApi:
+    Description: "API Gateway endpoint URL for Prod stage for museepa function"
+    Value: !Sub "https://${EventApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
+  LambdaExecutionRoleArn:
+    Description: "Implicit IAM Role created for Lambda function"
+    Value: !GetAtt LambdaExecutionRole.Arn
+
+  CurrentEventsListIntentFunctionArn:
+    Description: "CurrentEventsListIntentFunction Lambda function ARN"
+    Value: !GetAtt CurrentEventsListIntentFunction.Arn
+  EventDetailsIntentFunctionArn:
+    Description: "EventDetailsIntentFunction Lambda function ARN"
+    Value: !GetAtt EventDetailsIntentFunction.Arn
+  EventsByDateIntentFunctionArn:
+    Description: "EventsByDateIntentFunction Lambda function ARN"
+    Value: !GetAtt EventsByDateIntentFunction.Arn
+  MuseumDetailsIntentFunctionArn:
+    Description: "MuseumDetailsIntentFunction Lambda function ARN"
+    Value: !GetAtt MuseumDetailsIntentFunction.Arn
+  WorkDetailsIntentFunctionArn:
+    Description: "WorkDetailsIntentFunction Lambda function ARN"
+    Value: !GetAtt WorkDetailsIntentFunction.Arn
+  WorksListIntentFunctionArn:
+    Description: "WorksListIntentFunction Lambda function ARN"
+    Value: !GetAtt WorksListIntentFunction.Arn
