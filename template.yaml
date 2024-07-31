@@ -71,7 +71,7 @@ Resources:
         CurrentEventsListIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_current_events
             Method: GET
   EventDetailsIntentFunction:
@@ -87,7 +87,7 @@ Resources:
         EventDetailsIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_event_details
             Method: GET
             RequestParameters:
@@ -106,8 +106,8 @@ Resources:
         EventsByDateIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
-            Path: /get_events/{date}
+            RestApiId: !Ref SkillApi
+            Path: /get_events
             Method: GET
             RequestParameters:
               - method.request.querystring.date:
@@ -125,7 +125,7 @@ Resources:
         MuseumDetailsIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_museum_details
             Method: GET
   WorkDetailsIntentFunction:
@@ -141,7 +141,7 @@ Resources:
         WorkDetailsIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_work_details
             Method: GET
             RequestParameters:
@@ -160,8 +160,8 @@ Resources:
         WorksListIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
-            Path: /get_works/{limits}
+            RestApiId: !Ref SkillApi
+            Path: /get_works
             Method: GET
             RequestParameters:
               - method.request.querystring.page:
