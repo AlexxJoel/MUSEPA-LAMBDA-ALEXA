@@ -90,6 +90,9 @@ Resources:
             RestApiId: !Ref EventApi
             Path: /get_event_details
             Method: GET
+            RequestParameters:
+              - method.request.querystring.event_name:
+                  Required: true
   EventsByDateIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -106,6 +109,9 @@ Resources:
             RestApiId: !Ref EventApi
             Path: /get_events/{date}
             Method: GET
+            RequestParameters:
+              - method.request.querystring.date:
+                  Required: true
   MuseumDetailsIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -138,6 +144,9 @@ Resources:
             RestApiId: !Ref EventApi
             Path: /get_work_details
             Method: GET
+            RequestParameters:
+              - method.request.querystring.work_name:
+                  Required: true
   WorksListIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -154,6 +163,11 @@ Resources:
             RestApiId: !Ref EventApi
             Path: /get_works/{limits}
             Method: GET
+            RequestParameters:
+              - method.request.querystring.page:
+                  Required: false
+              - method.request.querystring.size:
+                  Required: false
 
 Outputs:
   SkillApi:
