@@ -61,104 +61,118 @@ Resources:
   CurrentEventsListIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/current_events_list_intent
+      CodeUri: modules/alexa_skill/current_events_list_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
         - x86_64
       Events:
-        GetEvent:
+        CurrentEventsListIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_current_events
             Method: GET
   EventDetailsIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/event_details_intent
+      CodeUri: modules/alexa_skill/event_details_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
         - x86_64
       Events:
-        GetEvent:
+        EventDetailsIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_event_details
             Method: GET
+            RequestParameters:
+              - method.request.querystring.event_name:
+                  Required: true
   EventsByDateIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/events_by_date_intent
+      CodeUri: modules/alexa_skill/events_by_date_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
         - x86_64
       Events:
-        GetEvent:
+        EventsByDateIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
-            Path: /get_events/{date}
+            RestApiId: !Ref SkillApi
+            Path: /get_events
             Method: GET
+            RequestParameters:
+              - method.request.querystring.date:
+                  Required: true
   MuseumDetailsIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/museum_details_intent
+      CodeUri: modules/alexa_skill/museum_details_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
         - x86_64
       Events:
-        GetEvent:
+        MuseumDetailsIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_museum_details
             Method: GET
   WorkDetailsIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/work_details_intent
+      CodeUri: modules/alexa_skill/work_details_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
         - x86_64
       Events:
-        GetEvent:
+        WorkDetailsIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
+            RestApiId: !Ref SkillApi
             Path: /get_work_details
             Method: GET
+            RequestParameters:
+              - method.request.querystring.work_name:
+                  Required: true
   WorksListIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/works_list_intent
+      CodeUri: modules/alexa_skill/works_list_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
       Architectures:
         - x86_64
       Events:
-        GetEvent:
+        WorksListIntent:
           Type: Api
           Properties:
-            RestApiId: !Ref EventApi
-            Path: /get_works/{limits}
+            RestApiId: !Ref SkillApi
+            Path: /get_works
             Method: GET
+            RequestParameters:
+              - method.request.querystring.page:
+                  Required: false
+              - method.request.querystring.size:
+                  Required: false
 
 Outputs:
   SkillApi:
-    Description: "API Gateway endpoint URL for Prod stage for museepa function"
-    Value: !Sub "https://${EventApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Description: "API Gateway endpoint URL for Prod stage for museepa skill function"
+    Value: !Sub "https://${SkillApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 
   LambdaExecutionRoleArn:
     Description: "Implicit IAM Role created for Lambda function"
