@@ -26,7 +26,7 @@ def lambda_handler(event, _context):
         if page is None or size is None:
             return {"statusCode": 400, "body": json.dumps({"error": "Missing fields"})}
 
-        if page < 0 or size <= 0:
+        if int(page) < 0 or int(size) <= 0:
             return {"statusCode": 400, "body": json.dumps({"error": "Invalid fields"})}
 
         # Find event by name

@@ -61,7 +61,7 @@ Resources:
   CurrentEventsListIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/current_events_list_intent
+      CodeUri: modules/alexa_skill/current_events_list_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -77,7 +77,7 @@ Resources:
   EventDetailsIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/event_details_intent
+      CodeUri: modules/alexa_skill/event_details_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -96,7 +96,7 @@ Resources:
   EventsByDateIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/events_by_date_intent
+      CodeUri: modules/alexa_skill/events_by_date_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -115,7 +115,7 @@ Resources:
   MuseumDetailsIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/museum_details_intent
+      CodeUri: modules/alexa_skill/museum_details_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -131,7 +131,7 @@ Resources:
   WorkDetailsIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/work_details_intent
+      CodeUri: modules/alexa_skill/work_details_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -150,7 +150,7 @@ Resources:
   WorksListIntentFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: modules/alexa-skill/works_list_intent
+      CodeUri: modules/alexa_skill/works_list_intent
       Handler: app.lambda_handler
       Runtime: python3.12
       Role: !GetAtt LambdaExecutionRole.Arn
@@ -171,8 +171,8 @@ Resources:
 
 Outputs:
   SkillApi:
-    Description: "API Gateway endpoint URL for Prod stage for museepa function"
-    Value: !Sub "https://${EventApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Description: "API Gateway endpoint URL for Prod stage for museepa skill function"
+    Value: !Sub "https://${SkillApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 
   LambdaExecutionRoleArn:
     Description: "Implicit IAM Role created for Lambda function"
