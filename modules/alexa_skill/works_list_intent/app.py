@@ -37,7 +37,9 @@ def lambda_handler(event, _context):
         # Get total elements count
         cur.execute("SELECT COUNT(*) AS total_elements FROM works")
         res = cur.fetchone()
-        total_elements = res['total_elements']
+        total_elements = int(res['total_elements'])
+        page = int(page)
+        size = int(size)
 
         is_last_page = total_elements <= (page + 1) * size
 
@@ -64,8 +66,8 @@ def lambda_handler(event, _context):
 
 # test_event = {
 #     'queryStringParameters': {
-#         'page': 0,
-#         'size': 10
+#         'page': "0",
+#         'size': "10"
 #     }
 # }
 # test_context = None
