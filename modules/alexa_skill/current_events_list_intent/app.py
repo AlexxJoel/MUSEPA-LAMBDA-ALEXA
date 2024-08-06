@@ -21,7 +21,7 @@ def lambda_handler(_event, _context):
         current_date = datetime.today().strftime('%Y-%m-%d')
 
         # Find current events
-        cur.execute("SELECT * FROM events WHERE %s >= start_date AND %s <= end_date",
+        cur.execute("SELECT * FROM events WHERE %s >= start_date AND %s <= end_date ORDER BY id ASC",
                     (current_date, current_date))
         entities = cur.fetchall()
 

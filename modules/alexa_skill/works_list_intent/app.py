@@ -31,7 +31,7 @@ def lambda_handler(event, _context):
             return {"statusCode": 400, "body": json.dumps({"error": "Invalid fields"})}
 
         # Find event by name
-        cur.execute("SELECT * FROM works OFFSET %s LIMIT %s", (page, size))
+        cur.execute("SELECT * FROM works ORDER BY id ASC OFFSET %s LIMIT %s", (page, size))
         entities = cur.fetchall()
 
         # Get total elements count

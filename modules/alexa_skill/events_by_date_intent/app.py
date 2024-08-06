@@ -26,7 +26,7 @@ def lambda_handler(event, _context):
             return {"statusCode": 400, "body": json.dumps({"error": "Missing fields"})}
 
         # Find events by date
-        cur.execute("SELECT * FROM events WHERE %s >= start_date AND %s <= end_date",
+        cur.execute("SELECT * FROM events WHERE %s >= start_date AND %s <= end_date ORDER BY id ASC",
                     (event_date, event_date))
         entities = cur.fetchall()
 
