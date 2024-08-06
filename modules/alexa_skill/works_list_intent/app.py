@@ -30,8 +30,11 @@ def lambda_handler(event, _context):
         if int(page) < 0 or int(size) <= 0:
             return {"statusCode": 400, "body": json.dumps({"error": "Invalid fields"})}
 
+        page = int(page)
+        size = int(size)
+        offset = page * size
+
         # Find event by name
-        offset = int(page) * int(size)
         cur.execute("SELECT * FROM works ORDER BY id ASC OFFSET %s LIMIT %s", (offset, size))
         entities = cur.fetchall()
 
@@ -39,8 +42,6 @@ def lambda_handler(event, _context):
         cur.execute("SELECT COUNT(*) AS total_elements FROM works")
         res = cur.fetchone()
         total_elements = int(res['total_elements'])
-        page = int(page)
-        size = int(size)
 
         is_last_page = total_elements <= (page + 1) * size
 
