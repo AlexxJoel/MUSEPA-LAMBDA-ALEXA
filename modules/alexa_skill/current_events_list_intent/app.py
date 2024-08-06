@@ -23,12 +23,12 @@ def lambda_handler(_event, _context):
         # Find current events
         cur.execute("SELECT * FROM events WHERE %s >= start_date AND %s <= end_date",
                     (current_date, current_date))
-        events = cur.fetchall()
+        entities = cur.fetchall()
 
-        if not events:
+        if not entities:
             return {"statusCode": 204, "body": json.dumps({"message": "No current events"})}
 
-        return {'statusCode': 200, 'body': json.dumps({'data': events}, default=datetime_serializer)}
+        return {'statusCode': 200, 'body': json.dumps({'data': entities}, default=datetime_serializer)}
     except Exception as e:
         return {'statusCode': 500, 'body': json.dumps({"error": str(e)})}
     finally:
@@ -39,7 +39,7 @@ def lambda_handler(_event, _context):
             cur.close()
 
 
-test_event = None
-test_context = None
-
-print(lambda_handler(test_event, test_context))
+# test_event = None
+# test_context = None
+#
+# print(lambda_handler(test_event, test_context))

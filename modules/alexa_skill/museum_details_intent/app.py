@@ -17,7 +17,7 @@ def lambda_handler(_event, _context):
         cur = conn.cursor(cursor_factory=RealDictCursor)
 
         # Find event by name
-        cur.execute("SELECT * FROM museums WHERE id = 1")
+        cur.execute("SELECT * FROM museums ORDER BY id ASC LIMIT 1")
         museum = cur.fetchone()
 
         if not museum:
@@ -34,7 +34,7 @@ def lambda_handler(_event, _context):
             cur.close()
 
 
-test_event = None
-test_context = None
-
-print(lambda_handler(test_event, test_context))
+# test_event = None
+# test_context = None
+#
+# print(lambda_handler(test_event, test_context))

@@ -26,13 +26,13 @@ def lambda_handler(event, _context):
             return {"statusCode": 400, "body": json.dumps({"error": "Missing fields"})}
 
         # Find event by name
-        cur.execute("SELECT * FROM events WHERE name ILIKE %s", (f"%{event_name}%",))
-        events = cur.fetchall()
+        cur.execute("SELECT * FROM events WHERE name ILIKE %s ORDER BY id ASC LIMIT 1", (f"%{event_name}%",))
+        entity = cur.fetchone()
 
-        if not events:
-            return {"statusCode": 204, "body": json.dumps({"message": "No matching events"})}
+        if not entity:
+            return {"statusCode": 204, "body": json.dumps({"message": "No matching entity"})}
 
-        return {"statusCode": 200, "body": json.dumps({"data": events}, default=datetime_serializer)}
+        return {"statusCode": 200, "body": json.dumps({"data": entity}, default=datetime_serializer)}
     except Exception as e:
         return {'statusCode': 500, 'body': json.dumps({"error": str(e)})}
     finally:
@@ -43,11 +43,11 @@ def lambda_handler(event, _context):
             cur.close()
 
 
-test_event = {
-    'queryStringParameters': {
-        'event_name': 'esculturas'
-    }
-}
-test_context = None
-
-print(lambda_handler(test_event, test_context))
+# test_event = {
+#     'queryStringParameters': {
+#         'event_name': 'esculturas'
+#     }
+# }
+# test_context = None
+#
+# print(lambda_handler(test_event, test_context))
